@@ -29,7 +29,7 @@ game_scores = [
 def game():
     return BowlingGame()
 
-def test_init():
+def test_frame_init():
     assert isinstance(Frame(5), Frame)
     assert isinstance(Frame(5, 5), Frame)
     with pytest.raises(FrameError):
@@ -40,7 +40,7 @@ def test_init():
         Frame(8, 8)
 
 
-def test_roll():
+def test_frame_roll():
     import pytest
     frame = Frame()
     with pytest.raises(FrameError):
@@ -55,17 +55,39 @@ def test_roll():
         frame.roll(4)
 
 
-def test_spare():
+def test_frame_spare():
     assert Frame(3, 7).is_spare
     assert Frame(3, 3).is_spare is False
 
 
-def test_strike():
+def test_frame_strike():
     assert Frame(10).is_strike
     assert Frame(0).is_strike is False
 
+def test_frame_completed():
+    frame = Frame()
+    assert not frame.completed
+    frame.roll(1)
+    assert not frame.completed
+    frame.roll(1)
+    assert frame.completed
+    frame = Frame(10)
+    assert not frame.completed
+    frame.roll(1)
+    assert not frame.completed
+    frame.roll(1)
+    assert frame.completed
+    frame = Frame(5, 5)
+    assert not frame.completed
+    frame.roll(1)
+    assert frame.completed
 
-@pytest.mark.parametrize("roll, score", game_scores)
-def test_game(roll, score, game):
-    game.roll(roll)
-    assert game.score == score
+
+def test_frame_score():
+    assert False
+
+
+#@pytest.mark.parametrize("roll, score", game_scores)
+#def test_game(roll, score, game):
+#    game.roll(roll)
+#    assert game.score == score
